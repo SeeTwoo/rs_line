@@ -18,7 +18,6 @@
 #include <unistd.h>
 
 #include "ts_readline.h"
-#include "ts_line_messages.h"
 #include "ts_hist.h"
 #include "ts_readline_struct.h"
 
@@ -144,8 +143,7 @@ char	*ts_readline(char *prompt, t_ts_hist *history) {
 		else if (c == '\x1b')
 			arrow_handling(&rl, &history);
 		else if (c == '\t')
-			continue ;
-			//ts_completion(&rl);
+			ts_completion(&rl);
 		else
 			fill_line(&rl, c);
 	}

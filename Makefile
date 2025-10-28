@@ -3,9 +3,10 @@ CC = cc -Wall -Wextra -Werror -Iincludes
 CCDEBUG = $(CC) -g3 -O0
 
 SRC_DIR = src
-SRC_FILES = ts_free_hist.c \
-			raw_mode_handling.c \
+SRC_FILES = raw_mode_handling.c \
+			rs_completion.c \
 			ts_add_hist.c \
+			ts_free_hist.c \
 			ts_init_hist.c \
 			ts_readline.c
 
