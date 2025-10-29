@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "includes/ts_readline.h"
-#include "includes/ts_hist.h"
+#include "includes/tshoo_line.h"
 
 #ifndef PROMPT
 # define PROMPT "\x1b[31m > \x1b[0m"
 #endif
 
+/*
 void	print_history(t_ts_hist *history) {
 	if (!history || !history->prev)
 		return ;
@@ -18,23 +18,23 @@ void	print_history(t_ts_hist *history) {
 		history = history->prev;
 	}
 }
+*/
 
 int	main(void) {
-	char		*line;
-	t_ts_hist	*history;
+	char			*line;
+	t_tshoo_hist	*history;
 
-	history = ts_init_hist();
+	history = tshoo_init_hist();
 	while (1) {
-		line = ts_readline(PROMPT, history);
+		line = tshoo_line(PROMPT, history);
 		if (!line)
 			return (1);
 		if (strcmp(line, "exit") == 0)
 			break ;
-		ts_add_hist(line, history);
-		print_history(history);
+		tshoo_add_hist(line, history);
 		free(line);
 	}
-	ts_free_hist(history);
+	tshoo_free_hist(history);
 	free(line);
 	return (0);
 }

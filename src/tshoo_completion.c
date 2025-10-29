@@ -16,7 +16,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#include "ts_readline_struct.h"
+#include "tshoo_line_struct.h"
 
 #ifndef DELIM
 # define DELIM "<>&| "
@@ -66,7 +66,7 @@ void	init_comp(t_comp *comp, t_rl *rl) {
 
 	comp->word_end = rl->line + temp;
 	comp->last_slash = NULL;
-	while (temp > 0 && !is_delim(rl->line[temp])) {
+	while (temp > 0 && !is_delim(rl->line[temp - 1])) {
 		if (!comp->last_slash && rl->line[temp] == '/')
 			comp->last_slash = rl->line + temp;
 		temp--;
@@ -87,9 +87,11 @@ void	replace(t_rl *rl, t_comp *comp) {
 	write(2, comp->filler, filler_len);
 }
 
-void	ts_completion(t_rl *rl) {
+void	tshoo_completion(t_rl *rl) {
 	t_comp	comp;
 
 	init_comp(&comp, rl);
+	if (!comp.filler)
+		return ;
 	replace(rl, &comp);
 }

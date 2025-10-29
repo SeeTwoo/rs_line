@@ -1,14 +1,14 @@
-NAME = ts_readline.a 
+NAME = tshoo_line.a 
 CC = cc -Wall -Wextra -Werror -Iincludes
 CCDEBUG = $(CC) -g3 -O0
 
 SRC_DIR = src
 SRC_FILES = raw_mode_handling.c \
-			rs_completion.c \
-			ts_add_hist.c \
-			ts_free_hist.c \
-			ts_init_hist.c \
-			ts_readline.c
+			tshoo_add_hist.c \
+			tshoo_completion.c \
+			tshoo_free_hist.c \
+			tshoo_init_hist.c \
+			tshoo_line.c
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

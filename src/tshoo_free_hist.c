@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                         :::     ::::::::   */
-/*   ts_init_hist.c                                      :+:     :+:    :+:   */
+/*   free_history.c                                      :+:     :+:    :+:   */
 /*                                                     +:+ +:+        +:+     */
 /*   By: seetwoo <marvin@42students.fr>              +#+  +:+       +#+       */
 /*                                                 +#+#+#+#+#+   +#+          */
@@ -11,21 +11,16 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <string.h>
 
-#include "ts_readline.h"
-#include "ts_hist.h"
+#include "tshoo_line_struct.h"
 
-t_ts_hist	*ts_init_hist(void) {
-	t_ts_hist	*new;
+void	tshoo_free_hist(t_tshoo_hist *history) {
+	t_tshoo_hist	*temp;
 
-	new = malloc(sizeof(t_ts_hist));
-	if (!new)
-		return (NULL);
-	new->prev = NULL;
-	new->next = NULL;
-	new->line = strdup("");
-	if (!new->line)
-		return (free(new), NULL);
-	return (new);
+	while (history) {
+		temp = history;
+		history = history->prev;
+		free(temp->line);
+		free(temp);
+	}
 }

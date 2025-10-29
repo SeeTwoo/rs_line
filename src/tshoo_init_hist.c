@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                         :::     ::::::::   */
-/*   ts_hist.h                                           :+:     :+:    :+:   */
+/*   ts_init_hist.c                                      :+:     :+:    :+:   */
 /*                                                     +:+ +:+        +:+     */
 /*   By: seetwoo <marvin@42students.fr>              +#+  +:+       +#+       */
 /*                                                 +#+#+#+#+#+   +#+          */
@@ -10,13 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TS_HIST_H
-# define TS_HIST_H
+#include <stdlib.h>
+#include <string.h>
 
-struct s_ts_hist {
-	t_ts_hist	*prev;
-	t_ts_hist	*next;
-	char		*line;
-};
+#include "tshoo_line_struct.h"
 
-#endif
+t_tshoo_hist	*tshoo_init_hist(void) {
+	t_tshoo_hist	*new;
+
+	new = malloc(sizeof(t_tshoo_hist));
+	if (!new)
+		return (NULL);
+	new->prev = NULL;
+	new->next = NULL;
+	new->line = strdup("");
+	if (!new->line)
+		return (free(new), NULL);
+	return (new);
+}

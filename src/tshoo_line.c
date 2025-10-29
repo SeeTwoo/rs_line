@@ -17,17 +17,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "ts_readline.h"
-#include "ts_hist.h"
-#include "ts_readline_struct.h"
+#include "tshoo_line_struct.h"
 
 typedef struct termios		t_settings;
 
 void	enable_raw_mode(t_settings *original);
 void	disable_raw_mode(t_settings *original);
-void	ts_completion(t_rl *rl);
+void	tshoo_completion(t_rl *rl);
 
-static void	replace_line(t_rl *rl, t_ts_hist **history, char cmd) {
+static void	replace_line(t_rl *rl, t_tshoo_hist **history, char cmd) {
 	int	temp;
 
 	if (*history == NULL)
@@ -82,7 +80,7 @@ static void	cursor_backward(t_rl *rl) {
 	write(2, "\x1b[D", 3);
 }
 
-static void	arrow_handling(t_rl *rl, t_ts_hist **history) {
+static void	arrow_handling(t_rl *rl, t_tshoo_hist **history) {
 	char	cmd_buf[32];
 	char	cmd;
 
@@ -100,8 +98,8 @@ static void	fill_line(t_rl *rl, char c) {
 	char	*src;
 	int		temp;
 
-	dest = &rl->line[rl->i + 1];
-	src = &rl->line[rl->i];
+	dest = rl->line + rl->i + 1;
+	src = rl->line + rl->i;
 	memmove(dest, src, strlen(src) + 1);
 	src[0] = c;
 	write(2, src, strlen(src));
@@ -123,7 +121,7 @@ static void	backspace_handling(t_rl *rl) {
 	write(2, "\x08\x1b[K", 4);
 }
 
-char	*ts_readline(char *prompt, t_ts_hist *history) {
+char	*tshoo_line(char const *prompt, t_tshoo_hist *history) {
 	t_settings	original;
 	char		c;
 	t_rl		rl;
@@ -143,7 +141,7 @@ char	*ts_readline(char *prompt, t_ts_hist *history) {
 		else if (c == '\x1b')
 			arrow_handling(&rl, &history);
 		else if (c == '\t')
-			ts_completion(&rl);
+			tshoo_completion(&rl);
 		else
 			fill_line(&rl, c);
 	}

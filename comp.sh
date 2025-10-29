@@ -1,1 +1,1 @@
-cc -Wall -Wextra -Werror -g3 -O0 line_basic_test.c ts_readline.a
+cc -Wall -Wextra -Werror -g3 -O0 line_basic_test.c tshoo_line.a
