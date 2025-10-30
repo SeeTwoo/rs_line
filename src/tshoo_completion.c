@@ -34,7 +34,7 @@ struct s_comp {
 };
 
 int	is_delim(char c) {
-	return ( c == '>' || c == '<' || c == '|' || c == '&' || c == ' ');
+	return (c == '>' || c == '<' || c == '|' || c == '&' || c == ' ');
 }
 
 char	*find_match(t_comp *comp) {
@@ -54,24 +54,41 @@ char	*find_match(t_comp *comp) {
 		return (NULL);
 	entry = readdir(dir);
 	while (entry) {
-		if (strncmp(comp->base, entry->d_name, comp->base_len) == 0)
+		if (strncmp(comp->base, entry->d_name, comp->base_len) == 0 || comp->base_len == 0)
 			return (entry->d_name + comp->base_len);
 		entry = readdir(dir);
 	}
 	return (NULL);
 }
 
+/*
 void	init_comp(t_comp *comp, t_rl *rl) {
 	int	temp = rl->i + strcspn(rl->line + rl->i, DELIM);
 
 	comp->word_end = rl->line + temp;
 	comp->last_slash = NULL;
-	while (temp > 0 && !is_delim(rl->line[temp - 1])) {
-		if (!comp->last_slash && rl->line[temp] == '/')
+	while (--temp >= 0 && !is_delim(rl->line[temp]))
+		if (!(comp->last_slash) && rl->line[temp] == '/')
 			comp->last_slash = rl->line + temp;
-		temp--;
-	}
 	comp->word_start = rl->line + temp;
+	comp->base = comp->last_slash ? comp->last_slash + 1 : comp->word_start;
+	comp->base_len = comp->word_end - comp->base;
+	comp->filler = find_match(comp);
+}
+*/
+void	init_comp(t_comp *comp, t_rl *rl) {
+	int	temp = rl->i;
+
+	while (temp > 0 && !is_delim(rl->line[temp - 1]))
+		temp--;
+	comp->word_start = rl->line + temp;
+	comp->last_slash = NULL;
+	while (rl->line[temp] && !is_delim(rl->line[temp])) {
+		if (rl->line[temp] == '/')
+			comp->last_slash = rl->line + temp;
+		temp++;
+	}
+	comp->word_end = rl->line + temp;
 	comp->base = comp->last_slash ? comp->last_slash + 1 : comp->word_start;
 	comp->base_len = comp->word_end - comp->base;
 	comp->filler = find_match(comp);
@@ -80,10 +97,11 @@ void	init_comp(t_comp *comp, t_rl *rl) {
 void	replace(t_rl *rl, t_comp *comp) {
 	size_t	filler_len = strlen(comp->filler);
 
-	memmove(rl->line + rl->i + filler_len, rl->line + rl->i, strlen(rl->line + rl->i) + 1);
-	memcpy(rl->line + rl->i, comp->filler, filler_len);
-	rl->i += filler_len;
+	memmove(comp->word_end + filler_len, comp->word_end, strcspn(comp->word_end, DELIM));
+	memcpy(comp->word_end, comp->filler, filler_len);
+	rl->i += (comp->word_end + filler_len) - rl->line;
 	rl->len += filler_len;
+	rl->line[rl->len] = '\0';
 	write(2, comp->filler, filler_len);
 }
 
