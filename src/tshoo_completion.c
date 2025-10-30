@@ -33,11 +33,11 @@ struct s_comp {
 	char	*filler;
 };
 
-int	is_delim(char c) {
+static int	is_delim(char c) {
 	return (c == '>' || c == '<' || c == '|' || c == '&' || c == ' ');
 }
 
-char	*find_match(t_comp *comp) {
+static char	*find_match(t_comp *comp) {
 	char			*dir_name;
 	DIR				*dir;
 	struct dirent	*entry;
@@ -76,7 +76,7 @@ void	init_comp(t_comp *comp, t_rl *rl) {
 	comp->filler = find_match(comp);
 }
 */
-void	init_comp(t_comp *comp, t_rl *rl) {
+static void	init_comp(t_comp *comp, t_rl *rl) {
 	int	temp = rl->i;
 
 	while (temp > 0 && !is_delim(rl->line[temp - 1]))
@@ -94,7 +94,7 @@ void	init_comp(t_comp *comp, t_rl *rl) {
 	comp->filler = find_match(comp);
 }
 
-void	replace(t_rl *rl, t_comp *comp) {
+static void	replace(t_rl *rl, t_comp *comp) {
 	size_t	filler_len = strlen(comp->filler);
 
 	memmove(comp->word_end + filler_len, comp->word_end, strcspn(comp->word_end, DELIM));

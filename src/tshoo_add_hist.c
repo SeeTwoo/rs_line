@@ -16,7 +16,7 @@
 
 #include "tshoo_line_struct.h"
 
-t_tshoo_hist	*new_hist_node(char *line, t_tshoo_hist *prev, t_tshoo_hist *next) {
+static t_tshoo_hist	*new_hist_node(char *line, t_tshoo_hist *prev, t_tshoo_hist *next) {
 	t_tshoo_hist	*new;
 
 	new = malloc(sizeof(t_tshoo_hist));
